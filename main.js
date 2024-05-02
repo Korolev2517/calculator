@@ -20,14 +20,17 @@ numbers.forEach((number) => {
     if (!secondValue && !operator) {
       firstValue += el.target.value;
       display.innerHTML = '';
-      display.innerHTML = firstValue;
-      if (firstValue.length > 3) {
-        firstValue.slice(0, -1)
+      display.innerHTML = firstValue.slice(0, 8);
+      if (firstValue.length > 8) {
+        display.innerHTML = firstValue.slice(0, 8);
       }
       console.log('firstValue: ', firstValue);
     } else {
       secondValue += el.target.value;
-      display.innerHTML = firstValue + operator + secondValue;
+      display.innerHTML = firstValue.slice(0, 8) + operator + secondValue;
+      if (secondValue.length > 8) {
+        display.innerHTML = firstValue.slice(0, 8) + operator + secondValue.slice(0, 8);
+      }
       console.log('secondValue: ', secondValue);
     }
   })
@@ -46,18 +49,23 @@ operators.forEach((op) => {
 
 // Производим математическую операцию
 equals.addEventListener('click', () => {
+
   switch (operator) {
     case '+':
-      result = parseFloat(firstValue) + parseFloat(secondValue);
+      result = parseFloat(firstValue.slice(0, 8)) + parseFloat(secondValue.slice(0, 8));
       break;
     case '-':
-      result = parseFloat(firstValue) - parseFloat(secondValue);
+      result = parseFloat(firstValue.slice(0, 8)) - parseFloat(secondValue.slice(0, 8));
       break;
     case '*':
-      result = parseFloat(firstValue) * parseFloat(secondValue);
+      result = parseFloat(firstValue.slice(0, 8)) * parseFloat(secondValue.slice(0, 8));
       break;
     case '/':
-      result = parseFloat(firstValue) / parseFloat(secondValue);
+      if (secondValue === '0') {
+        display.innerHTML = 'Ошибка';
+      } else {
+        result = parseFloat(firstValue.slice(0, 8)) / parseFloat(secondValue.slice(0, 8));
+      }
       break;
     default:
       console.log('Ошибка')
@@ -65,7 +73,7 @@ equals.addEventListener('click', () => {
   if (Number.isInteger(result)) {
     display.innerHTML = result;
   } else {
-    display.innerHTML = result.toFixed(1);
+    display.innerHTML = result.toFixed(2);
   }
   console.log('result: ', result)
   firstValue = result;
